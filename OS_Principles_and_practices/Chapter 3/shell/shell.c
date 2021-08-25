@@ -13,25 +13,6 @@
     2. Interpret
     3. Terminate
 */
-
-/* Basic loop of a shell */
-
-void shell_loop(void){
-    char *line;
-    char **args;
-    int status;
-
-    do{
-        printf("> ");
-        line = shell_read_line();
-        args = shell_split_line();
-        status = shell_execute(args);
-
-        free(line);
-        free(args);
-    } while(status);
-}
-
 /* read line function  */
 
 char *shell_read_line(void){
@@ -104,7 +85,7 @@ char **shell_split_line(char *line){
 /* shell execution */
 
 int shell_launch(char **args){
-    pid_t pid, wpid;
+    pid_t pid;
     int status;
 
     pid = fork();
@@ -114,10 +95,10 @@ int shell_launch(char **args){
         }
     }else if (pid < 0){
         perror("shell");
-    }else if(){
+    }else {
         //parent process is
         do{
-            wpid = wait(pid, &status, WUNTRACED);
+            waitpid(pid, &status, WUNTRACED);
         }while(!WIFEXITED(status) && !WIFSIGNALED(status));
     }
 
@@ -128,7 +109,7 @@ int shell_launch(char **args){
 
 int shell_cd(char **args);
 int shell_help(char **args);
-int shell_exid(char **args);
+int shell_exit(char **args);
 
 char *builtin_str[] = {
     "cd",
@@ -196,8 +177,25 @@ int shell_execute(char **args){
     return shell_launch(args);
 }
 
+/* Basic loop of a shell */
 
-int main(int argc, char *argv[]){
+void shell_loop(void){
+    char *line;
+    char **args;
+    int status;
+
+    do{
+        printf("> ");
+        line = shell_read_line();
+        args = shell_split_line(line);
+        status = shell_execute(args);
+
+        free(line);
+        free(args);
+    } while(status);
+}
+
+int main(int argc, char **args){
     
     shell_loop();
     return EXIT_SUCCESS;
