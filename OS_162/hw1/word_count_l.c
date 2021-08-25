@@ -28,15 +28,19 @@
 
 void init_words(word_count_list_t *wclist) {
   /* TODO */
+  list_init(&wclist);
 }
 
 size_t len_words(word_count_list_t *wclist) {
   /* TODO */
+  list_size(wclist);
   return 0;
 }
 
 word_count_t *find_word(word_count_list_t *wclist, char *word) {
   /* TODO */
+  word_count_list_t *head = (&wclist);
+
   return NULL;
 }
 
