@@ -38,7 +38,7 @@ Mutators take a reference to a list as first arg.
 /* Representation of a word count object.
    Includes next field for constructing singly linked list*/
 struct word_count {
-    char word[64];
+    char *word;
     int count;
     struct word_count *next;
 };
