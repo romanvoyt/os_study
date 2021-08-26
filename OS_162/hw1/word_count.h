@@ -36,7 +36,7 @@
  * PINTOS_LIST and/or PTHREADS are #define'd prior to #include to select the
  * representations.
  */
-
+//#define PINTOS_LIST
 #ifdef PINTOS_LIST
 #include "list.h"
 typedef struct word_count {
@@ -80,6 +80,13 @@ word_count_t *find_word(word_count_list_t *wclist, char *word);
  * present. Takes ownership of word.
  */
 word_count_t *add_word(word_count_list_t *wclist, char *word);
+
+/*
+ * Insert word with count, if not already present; increment count if present.
+ * Takes ownership of word.
+ */
+word_count_t *add_word_with_count(word_count_list_t *wclist, char *word,
+                                  int count);
 
 /* Print word counts to a file. */
 void fprint_words(word_count_list_t *wclist, FILE *outfile);

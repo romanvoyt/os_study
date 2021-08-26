@@ -1,9 +1,8 @@
 /*
- * Word count application with one thread per input file.
+ * Word count application with a single thread.
  *
- * You may modify this file in any way you like, and are expected to modify it.
- * Your solution must read each input file from a separate thread. We encourage
- * you to make as few changes as necessary.
+ * You may NOT modify this file. Any changes you make to this file will not
+ * be used when grading your submission.
  */
 
 /*
@@ -26,14 +25,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdlib.h>
-#include <pthread.h>
+#include <assert.h>
 
 #include "word_count.h"
 #include "word_helpers.h"
 
 /*
- * main - handle command line, spawning one thread per file.
+ * main - handle command line and file handles.
  */
 int main(int argc, char *argv[]) {
   /* Create the empty data structure. */
@@ -41,13 +41,22 @@ int main(int argc, char *argv[]) {
   init_words(&word_counts);
 
   if (argc <= 1) {
-    /* Process stdin in a single thread. */
     count_words(&word_counts, stdin);
   } else {
-    /* TODO */
+    /* Process each file. */
+    int i;
+    for (i = 1; i < argc; i++) {
+      FILE *infile = fopen(argv[i], "r");
+      if (infile == NULL) {
+        perror("fopen");
+        return 1;
+      }
+      count_words(&word_counts, infile);
+      fclose(infile);
+    }
   }
 
-  /* Output final result of all threads' work. */
+  /* Output final result. */
   wordcount_sort(&word_counts, less_count);
   fprint_words(&word_counts, stdout);
   return 0;
