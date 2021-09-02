@@ -65,7 +65,21 @@ int main(int argc, char *argv[]) {
     count_words(&word_counts, stdin);
   } else {
     /* TODO */
-    
+    int i;
+    pthread_t threads[argc - 1];
+    struct per_thread_args *args[argc-1];
+
+    for(i = 1; i < argc; i++){
+      args[i] = malloc(sizeof(per_thread_args));
+      args[i]->file_name = argv[i];
+      args[i]->word_counts = &word_counts;
+
+      pthread_create(threads+i, NULL, process_file, (void *)args[i]);
+    }
+
+    for(i=1; i < argc; i++){
+      pthread_join(threads[i], NULL);
+    }
   }
 
   /* Output final result of all threads' work. */
