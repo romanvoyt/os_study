@@ -9,7 +9,7 @@ struct tokens *tokenize(const char *line);
 
 size_t tokens_get_length(struct tokens *tokens);
 
-char tokens_get_token(struct tokens *tokens, size_t n);
+char *tokens_get_token(struct tokens *tokens, size_t n);
 
-
+void tokens_destroy(struct tokens *tokens);
 
