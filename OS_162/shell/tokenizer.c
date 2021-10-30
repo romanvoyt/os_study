@@ -7,7 +7,7 @@ struct tokens{
     size_t tokens_length;
     char **tokens;
     size_t buffers_length;
-    char *buffers;
+    char **buffers;
 };
 
 static void *vector_push(char ***pointer, size_t *size, void *elem){
@@ -55,7 +55,7 @@ struct tokens *tokenize(const char *line){
                 if(i + 1 < line_length){
                     token[n++] = line[++i];
                 }
-            } else if(ispace(c)){
+            } else if(isspace(c)){
                 if (n > 0){
                     void *word = copy_word(token, n);
                     vector_push(&tokens->tokens, &tokens->tokens_length, word);
@@ -76,9 +76,9 @@ struct tokens *tokenize(const char *line){
                 token[n++] = c;
             }
         }else if(mode == MODE_DQUOTE){
-            if(c = '"'){
+            if(c == '"'){
                 mode = MODE_NORMAL;
-            }else if (c = '\\'){
+            }else if (c == '\\'){
                 if(i + 1 < line_length){
                     token[n++] = line[++i];
                 }
