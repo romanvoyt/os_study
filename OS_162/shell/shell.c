@@ -23,6 +23,8 @@ struct termios shell_tmodes;
 pid_t shell_pgid;
 int cmd_exit(struct tokens *tokens);
 int cmd_help(struct tokens *tokens);
+int cmd_pwd(struct tokens *tokens);
+int cmd_cd(struct tokens *tokens);
 
 typedef int cmd_fun_t(struct tokens *tokens);
 
@@ -35,7 +37,8 @@ typedef struct fun_desc {
 fun_desc_t cmd_table[] = {
     {cmd_help, "?", "show this help menu"},
     {cmd_exit, "exit", "exit the shell"},
-    {cmd_cwd, "pwd", "Prints current working directory"},
+    {cmd_pwd, "pwd", "Prints current working directory"},
+    {cmd_cd, "cd", "changes working directory"},
 };
 
 int cmd_help(unused struct tokens *tokens){
@@ -50,21 +53,20 @@ int cmd_exit(unused struct tokens *tokens){
     exit(0);
 }
 
-int cmd_cwd(unused struct tokens *tokens){
-    long size;
-    char *ptr;
-    char *buf;
-    size = pathconf(".", _PC_PATH_MAX);
-
-
-    if ((buf = (char *)malloc((size_t)size)) != NULL)
-        ptr = getcwd(buf, (size_t)size);
-
-    printf("%s ", ptr);
-
+int cmd_pwd(unused struct tokens *tokens){
+    int MAX_PATHLEN = 100;
+    char *buf = (char *) malloc(MAX_PATHLEN);
+    
+    getcwd(buf, MAX_PATHLEN);
+	printf("%s \n", buf);
     free(buf);
 
     return 1;
+}
+
+int cmd_cd(unused struct tokens *tokens){
+    char *newdir = tokens_get_token(tokens, 1);
+    return chdir(newdir);
 }
 
 int lookup(char cmd[]){

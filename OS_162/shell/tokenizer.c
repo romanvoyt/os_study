@@ -114,7 +114,7 @@ void tokens_destroy(struct tokens *tokens){
     for(int i = 0; i < tokens->tokens_length; i++){
         free(tokens->tokens[i]);
     }
-    for(int i = 0; i < tokens->tokens_length; i++){
+    for(int i = 0; i < tokens->buffers_length; i++){
         free(tokens->buffers[i]);
     }
     if(tokens->tokens){
