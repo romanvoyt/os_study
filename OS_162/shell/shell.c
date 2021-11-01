@@ -115,7 +115,20 @@ int main(unused int argc, unused char *argv[]){
         if(fundex >= 0){
             cmd_table[fundex].fun(tokens);
         } else{
-            fprintf(stdout, "Not running \n");
+            int status;
+            pid_t pid = fork();
+
+            if(pid > 0){
+                wait(&status);
+            } else {
+                char **arg = (char **) malloc(tokens_get_length(tokens));
+                for (int i = 0; i < tokens_get_length(tokens); ++i){
+                    arg[i] = (char*) malloc(100);
+                    strcpy(arg[i], tokens_get_token(tokens, i));
+                }
+
+                execv(tokens_get_token(tokens,0), arg);
+            }
         }
 
         if(shell_is_interactive){
