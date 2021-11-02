@@ -25,6 +25,7 @@ int cmd_exit(struct tokens *tokens);
 int cmd_help(struct tokens *tokens);
 int cmd_pwd(struct tokens *tokens);
 int cmd_cd(struct tokens *tokens);
+int cmd_wait(struct tokens *tokens);
 
 typedef int cmd_fun_t(struct tokens *tokens);
 
@@ -39,6 +40,7 @@ fun_desc_t cmd_table[] = {
     {cmd_exit, "exit", "exit the shell"},
     {cmd_pwd, "pwd", "Prints current working directory"},
     {cmd_cd, "cd", "changes working directory"},
+    {cmd_wait, "wait", "waits until all background processes are done."},
 };
 
 int cmd_help(unused struct tokens *tokens){
@@ -67,6 +69,17 @@ int cmd_pwd(unused struct tokens *tokens){
 int cmd_cd(unused struct tokens *tokens){
     char *newdir = tokens_get_token(tokens, 1);
     return chdir(newdir);
+}
+
+int cmd_wait(unused struct tokens *tokens){
+    int status = 0;
+    pid_t pid;
+    while ((pid = waitpid(-1, &status)) > ){
+        if(WIFEXITED(status)){
+
+        }
+    }
+    return 0;
 }
 
 int lookup(char cmd[]){
